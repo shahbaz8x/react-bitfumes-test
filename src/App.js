@@ -1,23 +1,46 @@
 import logo from './logo.svg';
 import './App.css';
+import { useEffect, useRef, useState } from 'react';
+import Images from './components/Images';
+
 
 function App() {
+
+  const [title, setTitle] = useState("Hello React");
+  const [isShowing, setIsShowing] = useState(false);
+  const [didMount, setdidMount] = useState(false);
+  const mountRef = useRef(false);
+
+  useEffect(()=>{
+    setdidMount(true);
+    console.log('App mounted');
+  }, []);
+
+  useEffect(()=>{
+    if(mountRef.current) {
+      console.log('App updated');
+    } else {
+      mountRef.current = true;
+    }
+  }, [isShowing]);
+
+  function handleClick() {
+    setIsShowing(!isShowing);    
+  }
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <section className="flex justify-center">
+        <div className="w-1/2">
+          <div className="my-4">
+            {title}
+          </div>
+          <div>
+            <button className="p-1 bg-blue-700 text-white" onClick={handleClick}>Toggle Image</button>
+          </div>
+          {isShowing ? <Images /> : null}
+        </div>
+      </section>
     </div>
   );
 }
